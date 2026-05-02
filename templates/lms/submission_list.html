@@ -1,0 +1,7 @@
+<h1>Submissions: {{ activity.title }}</h1>
+<ul>
+{% for submission in submissions %}
+<li>{{ submission.student }} - {{ submission.submitted_at }} - Marks: {{ submission.marks|default:'Pending' }}
+<a href="{% url 'lms:evaluate_submission' submission.id %}">Evaluate</a></li>
+{% empty %}<li>No submissions yet.</li>{% endfor %}
+</ul>

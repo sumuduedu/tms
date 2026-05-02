@@ -1,0 +1,6 @@
+<h1>{{ content.title }}</h1>
+<p>{{ content.description }}</p>
+<p>Type: {{ content.get_content_type_display }}</p>
+{% if content.file %}<p><a href="{{ content.file.url }}">Download File</a></p>{% endif %}
+{% if content.url %}<p><a href="{{ content.url }}" target="_blank">Open Link</a></p>{% endif %}
+{% if content.text_content %}<pre>{{ content.text_content }}</pre>{% endif %}

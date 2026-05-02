@@ -1,0 +1,7 @@
+<h1>Content - {{ batch }}</h1>
+{% if user.role == 'teacher' or user.is_staff %}<a href="{% url 'lms:content_create' batch.id %}">Upload Content</a>{% endif %}
+<ul>
+{% for content in contents %}
+  <li><a href="{% url 'lms:content_detail' content.id %}">{{ content.title }}</a> ({{ content.get_content_type_display }})</li>
+{% empty %}<li>No content available.</li>{% endfor %}
+</ul>

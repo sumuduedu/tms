@@ -1,0 +1,7 @@
+<h1>Activities - {{ batch }}</h1>
+{% if user.role == 'teacher' or user.is_staff %}<a href="{% url 'lms:activity_create' batch.id %}">Create Activity</a>{% endif %}
+<ul>
+{% for activity in activities %}
+  <li><a href="{% url 'lms:activity_detail' activity.id %}">{{ activity.title }}</a> - Due {{ activity.due_date }}</li>
+{% empty %}<li>No activities.</li>{% endfor %}
+</ul>
