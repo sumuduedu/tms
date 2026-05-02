@@ -1,0 +1,6 @@
+<h1>{% if is_create %}Create{% else %}Update{% endif %} Job Post</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>

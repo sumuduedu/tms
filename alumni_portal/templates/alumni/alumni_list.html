@@ -1,0 +1,13 @@
+<h1>Alumni Directory</h1>
+<table>
+  <tr><th>Name</th><th>Course</th><th>Batch</th><th>Completion</th><th>Company</th></tr>
+  {% for profile in alumni %}
+  <tr>
+    <td>{{ profile.user.get_full_name|default:profile.user.username }}</td>
+    <td>{{ profile.course }}</td>
+    <td>{{ profile.batch }}</td>
+    <td>{{ profile.completion_date }}</td>
+    <td>{{ profile.company|default:"-" }}</td>
+  </tr>
+  {% empty %}<tr><td colspan="5">No alumni found.</td></tr>{% endfor %}
+</table>
