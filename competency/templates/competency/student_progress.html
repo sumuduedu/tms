@@ -1,0 +1,18 @@
+<h1>{% if is_teacher %}Competency Records{% else %}My Competencies{% endif %}</h1>
+{% if is_teacher %}
+<table>
+<tr><th>Student</th><th>Unit</th><th>Competency</th><th>Status</th><th>Remarks</th></tr>
+{% for r in records %}
+<tr><td>{{ r.student }}</td><td>{{ r.competency.unit.code }}</td><td>{{ r.competency.name }}</td><td>{{ r.get_status_display }}</td><td>{{ r.remarks }}</td></tr>
+{% empty %}<tr><td colspan="5">No records</td></tr>{% endfor %}
+</table>
+{% else %}
+{% for unit, comps in progress %}
+<h2>{{ unit.code }} - {{ unit.title }}</h2>
+<ul>
+{% for comp, rec in comps %}
+<li>{{ comp.name }} - {% if rec %}{{ rec.get_status_display }}{% else %}Not Assessed{% endif %}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+{% endif %}

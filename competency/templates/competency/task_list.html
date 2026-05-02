@@ -1,0 +1,7 @@
+<h1>Tasks</h1>
+<table>
+<tr><th>Unit</th><th>Competency</th><th>Task</th></tr>
+{% for task in tasks %}
+<tr><td>{{ task.competency.unit.code }}</td><td>{{ task.competency.name }}</td><td>{{ task.title }}</td></tr>
+{% empty %}<tr><td colspan="3">No tasks</td></tr>{% endfor %}
+</table>

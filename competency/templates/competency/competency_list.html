@@ -1,0 +1,7 @@
+<h1>Competencies</h1>
+<table>
+<tr><th>Unit</th><th>Name</th><th>Description</th></tr>
+{% for competency in competencies %}
+<tr><td>{{ competency.unit.code }}</td><td>{{ competency.name }}</td><td>{{ competency.description }}</td></tr>
+{% empty %}<tr><td colspan="3">No competencies</td></tr>{% endfor %}
+</table>

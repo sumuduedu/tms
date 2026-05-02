@@ -1,0 +1,7 @@
+<h1>Assess Competency</h1>
+<p><strong>Student:</strong> {{ student }}</p>
+<p><strong>Competency:</strong> {{ competency.name }} ({{ competency.unit.code }})</p>
+<form method="post">{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">Save Assessment</button>
+</form>
