@@ -1,0 +1,12 @@
+<h1>{{ activity.title }}</h1>
+<p>{{ activity.description }}</p>
+<p>Type: {{ activity.get_activity_type_display }}</p>
+<p>Due: {{ activity.due_date }}</p>
+{% if user.role == 'student' and submission %}
+<p>You already submitted on {{ submission.submitted_at }}.</p>
+{% elif user.role == 'student' %}
+<a href="{% url 'lms:submit_activity' activity.id %}">Submit Activity</a>
+{% endif %}
+{% if user.role == 'teacher' or user.is_staff %}
+<a href="{% url 'lms:submission_list' activity.id %}">View Submissions</a>
+{% endif %}
