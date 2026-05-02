@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ course.title }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem auto; max-width: 960px; }
+    .actions a { margin-right: .5rem; }
+    .module { border-left: 3px solid #2d6cdf; padding-left: .75rem; margin: .75rem 0; }
+    a.button { background: #2d6cdf; color: #fff; padding: .4rem .75rem; border-radius: 4px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <p><a href="{% url 'courses:course_list' %}">← Back to courses</a></p>
+  <h1>{{ course.title }}</h1>
+  <p><strong>Status:</strong> {{ course.get_status_display }}</p>
+  <p><strong>Duration:</strong> {{ course.duration }}</p>
+  <p><strong>Fee:</strong> ${{ course.fee }}</p>
+  <p>{{ course.description }}</p>
+
+  {% if can_manage_courses %}
+    <div class="actions">
+      <a class="button" href="{% url 'courses:course_update' course.pk %}">Edit Course</a>
+      <a class="button" href="{% url 'courses:course_delete' course.pk %}">Delete Course</a>
+      <a class="button" href="{% url 'courses:module_create' course.pk %}">Add Module</a>
+    </div>
+  {% endif %}
+
+  <h2>Modules</h2>
+  {% for module in course.modules.all %}
+    <div class="module">
+      <h3>{{ module.order }}. {{ module.name }}</h3>
+      <p>{{ module.description }}</p>
+    </div>
+  {% empty %}
+    <p>No modules added yet.</p>
+  {% endfor %}
+</body>
+</html>

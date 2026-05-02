@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Courses</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem auto; max-width: 960px; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    .muted { color: #666; }
+    a.button { background: #2d6cdf; color: #fff; padding: .4rem .75rem; border-radius: 4px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>Available Courses</h1>
+  {% if can_manage_courses %}
+    <p><a href="{% url 'courses:course_create' %}" class="button">Create Course</a></p>
+  {% endif %}
+
+  {% for course in courses %}
+    <div class="card">
+      <h2><a href="{% url 'courses:course_detail' course.pk %}">{{ course.title }}</a></h2>
+      <p class="muted">Duration: {{ course.duration }} | Fee: ${{ course.fee }}</p>
+      <p>{{ course.description|truncatewords:35 }}</p>
+    </div>
+  {% empty %}
+    <p>No published courses are available.</p>
+  {% endfor %}
+</body>
+</html>
