@@ -1,0 +1,7 @@
+<h1>NCS Units</h1>
+<table>
+<tr><th>Code</th><th>Title</th><th>Module</th></tr>
+{% for unit in units %}
+<tr><td>{{ unit.code }}</td><td>{{ unit.title }}</td><td>{{ unit.module|default:'-' }}</td></tr>
+{% empty %}<tr><td colspan="3">No units</td></tr>{% endfor %}
+</table>
