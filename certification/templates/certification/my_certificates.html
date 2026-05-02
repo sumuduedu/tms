@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">My Certificates</h2>
+  <div class="row g-3">
+    {% for certificate in certificates %}
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ certificate.certificate_id }}</h5>
+          <p class="mb-1"><strong>Batch:</strong> {{ certificate.batch }}</p>
+          <p class="mb-1"><strong>Issue Date:</strong> {{ certificate.issue_date }}</p>
+          <p class="mb-3"><strong>Status:</strong> {{ certificate.status }}</p>
+          <a href="{% url 'download_certificate' certificate.id %}" class="btn btn-primary">Download</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info mb-0">You do not have any certificates yet.</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
