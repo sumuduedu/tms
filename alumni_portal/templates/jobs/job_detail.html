@@ -1,0 +1,14 @@
+<h1>{{ job.title }}</h1>
+<p><strong>Company:</strong> {{ job.company_name }}</p>
+<p><strong>Location:</strong> {{ job.location }}</p>
+<p><strong>Posted By:</strong> {{ job.posted_by }}</p>
+<p><strong>Created At:</strong> {{ job.created_at }}</p>
+<p>{{ job.description|linebreaksbr }}</p>
+
+{% if user.is_authenticated %}
+  <a href="{% url 'alumni:job_update' job.id %}">Edit</a>
+  <form method="post" action="{% url 'alumni:job_delete' job.id %}">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+  </form>
+{% endif %}

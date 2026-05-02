@@ -1,0 +1,13 @@
+<h1>Job Opportunities</h1>
+{% if user.is_authenticated %}<a href="{% url 'alumni:job_create' %}">Post New Job</a>{% endif %}
+<ul>
+  {% for job in jobs %}
+    <li>
+      <a href="{% url 'alumni:job_detail' job.id %}">{{ job.title }}</a>
+      at {{ job.company_name }} ({{ job.location }})
+      {% if not job.is_active %}<em>[Inactive]</em>{% endif %}
+    </li>
+  {% empty %}
+    <li>No jobs available right now.</li>
+  {% endfor %}
+</ul>

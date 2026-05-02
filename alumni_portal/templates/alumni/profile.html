@@ -1,0 +1,10 @@
+<h1>My Alumni Profile</h1>
+<p><strong>Name:</strong> {{ profile.user.get_full_name|default:profile.user.username }}</p>
+<p><strong>Course:</strong> {{ profile.course }}</p>
+<p><strong>Batch:</strong> {{ profile.batch }}</p>
+<p><strong>Completion Date:</strong> {{ profile.completion_date }}</p>
+<p><strong>Current Job:</strong> {{ profile.current_job|default:"N/A" }}</p>
+<p><strong>Company:</strong> {{ profile.company|default:"N/A" }}</p>
+<p><strong>Skills:</strong><br>{{ profile.skills|linebreaksbr }}</p>
+<p><strong>Bio:</strong><br>{{ profile.bio|default:"N/A"|linebreaksbr }}</p>
+<a href="{% url 'alumni:update_profile' %}">Edit Profile</a>
