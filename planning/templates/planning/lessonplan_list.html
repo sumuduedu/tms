@@ -1,0 +1,11 @@
+<h1>Lesson Plans - {{ batch }}</h1>
+<ul>
+  {% for plan in lessonplans %}
+    <li>
+      <a href="{% url 'planning:lessonplan_detail' plan.id %}">{{ plan.topic }}</a>
+      {% if plan.timetable %} ({{ plan.timetable.date }} {{ plan.timetable.start_time }}) {% endif %}
+    </li>
+  {% empty %}
+    <li>No lesson plans found.</li>
+  {% endfor %}
+</ul>
