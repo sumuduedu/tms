@@ -1,0 +1,2 @@
+<h2>Results - {{ assessment.title }}</h2>
+<table><tr><th>Student</th><th>Marks</th><th>Grade</th></tr>{% for r in results %}<tr><td>{{ r.student }}</td><td>{{ r.marks_obtained }}/{{ assessment.total_marks }}</td><td>{{ r.grade }}</td></tr>{% endfor %}</table>

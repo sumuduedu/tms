@@ -1,0 +1,2 @@
+<h2>Student Results</h2>
+<table><tr><th>Batch</th><th>Assessment</th><th>Marks</th><th>Total</th><th>Grade</th></tr>{% for r in results %}<tr><td>{{ r.assessment.batch }}</td><td>{{ r.assessment.title }}</td><td>{{ r.marks_obtained }}</td><td>{{ r.assessment.total_marks }}</td><td>{{ r.grade }}</td></tr>{% endfor %}</table>
