@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>My Enrollment Requests</h2>
+  <table class="table table-bordered">
+    <thead><tr><th>Course</th><th>Status</th><th>Message</th><th>Created</th></tr></thead>
+    <tbody>
+      {% for req in requests %}
+      <tr>
+        <td>{{ req.course }}</td>
+        <td><strong>{{ req.get_status_display }}</strong></td>
+        <td>{{ req.message|default:"-" }}</td>
+        <td>{{ req.created_at }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No requests submitted yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
