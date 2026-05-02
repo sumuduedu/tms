@@ -1,0 +1,30 @@
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+
+from .forms import LoginForm
+
+
+class EmailLoginView(LoginView):
+    template_name = "accounts/login.html"
+    authentication_form = LoginForm
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse_lazy("accounts:dashboard")
+
+
+def login_view(request):
+    return EmailLoginView.as_view()(request)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("accounts:login")
+
+
+@login_required
+def dashboard_view(request):
+    return render(request, "accounts/dashboard.html")
