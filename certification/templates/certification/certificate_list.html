@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">Issued Certificates</h2>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-striped mb-0">
+        <thead>
+          <tr>
+            <th>Certificate ID</th>
+            <th>Student</th>
+            <th>Batch</th>
+            <th>Issue Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for certificate in certificates %}
+          <tr>
+            <td>{{ certificate.certificate_id }}</td>
+            <td>{{ certificate.student.get_full_name|default:certificate.student.username }}</td>
+            <td>{{ certificate.batch }}</td>
+            <td>{{ certificate.issue_date }}</td>
+            <td>
+              <span class="badge {% if certificate.status == 'Issued' %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                {{ certificate.status }}
+              </span>
+            </td>
+            <td>
+              <a href="{% url 'download_certificate' certificate.id %}" class="btn btn-sm btn-primary">Download</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center py-4">No certificates found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
