@@ -1,0 +1,2 @@
+<h2>Attendance - {{ batch }}</h2>
+<table><tr><th>Date</th><th>Student</th><th>Status</th></tr>{% for r in records %}<tr><td>{{ r.date }}</td><td>{{ r.student }}</td><td>{{ r.get_status_display }}</td></tr>{% endfor %}</table>

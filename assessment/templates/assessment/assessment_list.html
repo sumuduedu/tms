@@ -1,0 +1,2 @@
+<h2>Assessments - {{ batch }}</h2>
+<table><tr><th>Title</th><th>Type</th><th>Total</th><th>Date</th></tr>{% for a in assessments %}<tr><td>{{ a.title }}</td><td>{{ a.get_assessment_type_display }}</td><td>{{ a.total_marks }}</td><td>{{ a.date }}</td></tr>{% endfor %}</table>

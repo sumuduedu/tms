@@ -1,0 +1,2 @@
+<h2>Final Results</h2>
+<table><tr><th>Batch</th><th>Student</th><th>Total</th><th>Average</th><th>Status</th><th>Completed</th></tr>{% for r in final_results %}<tr><td>{{ r.batch }}</td><td>{{ r.student }}</td><td>{{ r.total_marks }}</td><td>{{ r.average_marks }}</td><td>{{ r.get_status_display }}</td><td>{{ r.completed }}</td></tr>{% endfor %}</table>
