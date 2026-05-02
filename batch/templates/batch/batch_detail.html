@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ batch.name }}</h2>
+<p><strong>Course:</strong> {{ batch.course }}</p>
+<p><strong>Teacher:</strong> {{ batch.teacher.get_full_name|default:batch.teacher.username }}</p>
+<p><strong>Status:</strong> {{ batch.get_status_display }}</p>
+<p><strong>Duration:</strong> {{ batch.start_date }} to {{ batch.end_date }}</p>
+
+<h3>Students</h3>
+<ul>
+  {% for student in batch.students.all %}
+    <li>{{ student.get_full_name|default:student.username }} ({{ student.email }})</li>
+  {% empty %}
+    <li>No students assigned yet.</li>
+  {% endfor %}
+</ul>
+
+{% if request.user.is_staff or request.user.is_superuser %}
+  <a href="{% url 'batch_update' batch.pk %}">Edit</a>
+  <a href="{% url 'assign_students_to_batch' batch.pk %}">Assign Students</a>
+  <form method="post" action="{% url 'batch_delete' batch.pk %}">{% csrf_token %}<button type="submit">Delete</button></form>
+{% endif %}
+{% endblock %}

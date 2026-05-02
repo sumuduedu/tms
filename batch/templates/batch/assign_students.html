@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Assign Students: {{ batch.name }}</h2>
+<p>Course: {{ batch.course }} | Teacher: {{ batch.teacher.get_full_name|default:batch.teacher.username }}</p>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Update Students</button>
+</form>
+{% endblock %}
