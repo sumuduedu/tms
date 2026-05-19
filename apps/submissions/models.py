@@ -25,6 +25,7 @@ class Submission(models.Model):
         return "Reviewed" if self.marks is not None else "Pending"
 
 
+
 class StudentProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="student_profile")
     institute_id = models.CharField(max_length=50, unique=True)
