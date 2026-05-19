@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h2>Exercise Form</h2><form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}{{ formset.management_form }}{% for frm in formset %}{{ frm.as_p }}{% endfor %}<button class="btn btn-primary">Save</button></form>{% endblock %}

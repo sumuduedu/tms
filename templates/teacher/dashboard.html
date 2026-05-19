@@ -1,0 +1,21 @@
+{% extends 'base.html' %}{% block content %}
+<h3 class='mb-3'>Teacher Dashboard</h3>
+<div class='row g-3 mb-3'>
+  <div class='col-md-4 col-xl-2'><div class='card card-hover'><div class='card-body'><i class='bi bi-journal-code'></i> Total Exercises <h4>{{ total_exercises }}</h4></div></div></div>
+  <div class='col-md-4 col-xl-2'><div class='card card-hover'><div class='card-body'><i class='bi bi-people'></i> Total Students <h4>{{ total_students }}</h4></div></div></div>
+  <div class='col-md-4 col-xl-2'><div class='card card-hover'><div class='card-body'><i class='bi bi-upload'></i> Submissions <h4>{{ total_submissions }}</h4></div></div></div>
+  <div class='col-md-4 col-xl-2'><div class='card card-hover'><div class='card-body'><i class='bi bi-hourglass-split'></i> Pending <h4>{{ pending_reviews }}</h4></div></div></div>
+</div>
+<div class='row g-3'>
+<div class='col-lg-7'><div class='card'><div class='card-header'>Exercise Management</div><div class='table-responsive'><table class='table table-sm'>
+<tr><th>Title</th><th>Subject</th><th>Deadline</th><th>Submissions</th><th>Created</th><th>Actions</th></tr>
+{% for e in exercise_rows %}<tr><td>{{ e.title }}</td><td>{{ e.category }}</td><td>{{ e.deadline|date:'Y-m-d H:i' }}</td><td>{{ e.total_submissions }}</td><td>{{ e.created_at|date:'Y-m-d' }}</td><td><a href='{% url "exercises:edit" e.pk %}'>Edit</a></td></tr>{% endfor %}
+</table></div></div></div>
+<div class='col-lg-5'><div class='card mb-3'><div class='card-header'>Deadline Warnings</div><ul class='list-group list-group-flush'>{% for e in deadline_warnings %}<li class='list-group-item d-flex justify-content-between'><span>{{ e.title }}</span><span class='badge text-bg-warning'>{{ e.deadline|date:'M d H:i' }}</span></li>{% empty %}<li class='list-group-item'>No urgent deadlines.</li>{% endfor %}</ul></div>
+<div class='card'><div class='card-header'>Recent Uploads</div><ul class='list-group list-group-flush'>{% for s in recent_uploads %}<li class='list-group-item'>{{ s.student.email }} - {{ s.exercise.title }}</li>{% endfor %}</ul></div></div>
+</div>
+<div class='card mt-3'><div class='card-header'>Submission Management</div><div class='table-responsive'><table class='table table-striped'>
+<tr><th>Student</th><th>Exercise</th><th>Submitted</th><th>File</th><th>Marks</th><th>Feedback</th><th>Status</th></tr>
+{% for s in latest_submissions %}<tr><td>{{ s.student.email }}</td><td>{{ s.exercise.title }}</td><td>{{ s.submitted_at|date:'Y-m-d H:i' }}</td><td><a class='btn btn-sm btn-outline-primary' href='{{ s.submission_file.url }}'>Download</a></td><td>{{ s.marks|default:'-' }}</td><td>{{ s.feedback|default:'-'|truncatechars:25 }}</td><td><span class='badge {% if s.review_status == "Reviewed" %}text-bg-success{% else %}text-bg-secondary{% endif %}'>{{ s.review_status }}</span></td></tr>{% endfor %}
+</table></div></div>
+{% endblock %}

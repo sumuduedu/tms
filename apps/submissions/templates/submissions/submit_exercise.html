@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Submit: {{ exercise.title }}</h2>
+<p class="text-muted">Upload a main file and optional multiple supporting files.</p>
+<form method="post" enctype="multipart/form-data" class="card p-3">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if submission and submission.attachments.all %}
+    <h6>Current attached files</h6>
+    <ul>
+      {% for a in submission.attachments.all %}<li><a href="{{ a.file.url }}">{{ a.file.name }}</a></li>{% empty %}<li>No extra files.</li>{% endfor %}
+    </ul>
+  {% endif %}
+  <button class="btn btn-success">Upload Submission</button>
+</form>
+{% endblock %}

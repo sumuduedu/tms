@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block content %}
+<h3 class='mb-3'>Student Dashboard</h3>
+<div class='row g-3 mb-3'>
+<div class='col-md-6 col-xl-2'><div class='card'><div class='card-body'>Total Exercises <h4>{{ total_exercises }}</h4></div></div></div>
+<div class='col-md-6 col-xl-2'><div class='card'><div class='card-body'>Completed <h4>{{ completed_exercises }}</h4></div></div></div>
+<div class='col-md-6 col-xl-2'><div class='card'><div class='card-body'>Pending <h4>{{ pending_exercises }}</h4></div></div></div>
+<div class='col-md-6 col-xl-2'><div class='card'><div class='card-body'>Avg Marks <h4>{{ average_marks|default:'-' }}</h4></div></div></div>
+</div>
+<div class='card mb-3'><div class='card-header'>Exercises</div><div class='card-body'><div class='row g-3'>{% for ex in exercise_cards %}<div class='col-md-6 col-lg-4'><div class='card h-100 card-hover'><div class='card-body'><h6>{{ ex.title }}</h6><p class='small text-muted'>{{ ex.category }} • due {{ ex.deadline|date:'Y-m-d H:i' }}</p><p>{{ ex.description|truncatechars:90 }}</p><a class='btn btn-sm btn-outline-primary' href='{{ ex.instruction_file.url }}'>Instruction</a> <a class='btn btn-sm btn-primary' href='{% url "submissions:submit" ex.pk %}'>Upload</a></div></div></div>{% endfor %}</div></div></div>
+<div class='card'><div class='card-header'>Submission History</div><div class='table-responsive'><table class='table'>
+<tr><th>Exercise</th><th>Date</th><th>Marks</th><th>Feedback</th><th>Status</th></tr>
+{% for s in submission_history %}<tr><td>{{ s.exercise.title }}</td><td>{{ s.submitted_at|date:'Y-m-d H:i' }}</td><td>{{ s.marks|default:'-' }}</td><td>{{ s.feedback|default:'-' }}</td><td><span class='badge {% if s.marks %}text-bg-success{% else %}text-bg-secondary{% endif %}'>{% if s.marks %}Reviewed{% else %}Pending{% endif %}</span></td></tr>{% endfor %}
+</table></div></div>
+{% endblock %}
