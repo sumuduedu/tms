@@ -1,7 +1,15 @@
 from django.contrib import messages
+
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils import timezone
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+
 from django.views.generic import ListView, UpdateView
 
 from apps.exercises.models import Exercise
@@ -25,7 +33,11 @@ class SubmissionHistoryView(LoginRequiredMixin, StudentRequiredMixin, ListView):
     template_name = "submissions/submission_history.html"
 
     def get_queryset(self):
+
+        return Submission.objects.filter(student=self.request.user).select_related("exercise")
+
         return Submission.objects.filter(student=self.request.user)
+
 
 
 class TeacherSubmissionListView(LoginRequiredMixin, TeacherRequiredMixin, ListView):
@@ -46,10 +58,31 @@ class GradeSubmissionView(LoginRequiredMixin, TeacherRequiredMixin, UpdateView):
         return Submission.objects.filter(exercise__teacher=self.request.user)
 
 
+
+@login_required
+
+
 def submit_exercise(request, pk):
     exercise = get_object_or_404(Exercise, pk=pk)
     if request.user.role != "Student":
         return redirect("dashboard:home")
+
+
+    submission = Submission.objects.filter(exercise=exercise, student=request.user).first()
+    if submission and timezone.now() > exercise.deadline:
+        messages.error(request, "Deadline passed. You cannot replace this submission.")
+        return redirect("submissions:history")
+
+    form = SubmissionForm(request.POST or None, request.FILES or None, instance=submission)
+    if request.method == "POST" and form.is_valid():
+        instance = form.save(commit=False)
+        instance.exercise = exercise
+        instance.student = request.user
+        instance.save()
+        messages.success(request, "Submission uploaded successfully.")
+        return redirect("submissions:history")
+    return render(request, "submissions/submit_exercise.html", {"form": form, "exercise": exercise, "submission": submission})
+
     submission, _ = Submission.objects.get_or_create(exercise=exercise, student=request.user)
     form = SubmissionForm(request.POST or None, request.FILES or None, instance=submission)
     if request.method == "POST" and form.is_valid():
@@ -59,3 +92,4 @@ def submit_exercise(request, pk):
         messages.success(request, "Submission uploaded successfully.")
         return redirect("submissions:history")
     return render(request, "submissions/submit_exercise.html", {"form": form, "exercise": exercise})
+

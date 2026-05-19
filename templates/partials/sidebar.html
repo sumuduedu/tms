@@ -1,0 +1,15 @@
+<aside class="sidebar col-lg-2 col-md-3 border-end p-3">
+  {% if user.role == 'Teacher' %}
+    <a class="d-block py-1" href="{% url 'dashboard:teacher' %}">Dashboard</a>
+    <a class="d-block py-1" href="{% url 'exercises:manage' %}">Exercises</a>
+    <a class="d-block py-1" href="{% url 'exercises:create' %}">Create Exercise</a>
+    <a class="d-block py-1" href="{% url 'submissions:teacher-list' %}">Submissions</a>
+    <a class="d-block py-1" href="{% url 'dashboard:teacher-students' %}">Students</a>
+  {% else %}
+    <a class="d-block py-1" href="{% url 'dashboard:student' %}">Dashboard</a>
+    <a class="d-block py-1" href="{% url 'exercises:list' %}">Exercises</a>
+    <a class="d-block py-1" href="{% url 'submissions:history' %}">My Submissions</a>
+    <a class="d-block py-1" href="#">Profile</a>
+  {% endif %}
+  <a class="d-block py-1 text-danger" href="{% url 'accounts:logout' %}">Logout</a>
+</aside>
