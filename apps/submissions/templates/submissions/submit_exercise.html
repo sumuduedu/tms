@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% block content %}
 <h2>Submit: {{ exercise.title }}</h2>
@@ -14,3 +15,6 @@
   <button class="btn btn-success">Upload Submission</button>
 </form>
 {% endblock %}
+
+{% extends 'base.html' %}{% block content %}<h2>Submit: {{ exercise.title }}</h2><form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button class="btn btn-success">Upload</button></form>{% endblock %}
+

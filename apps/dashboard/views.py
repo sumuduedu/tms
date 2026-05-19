@@ -1,12 +1,20 @@
 from django.contrib.auth.decorators import login_required
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Avg, Count, Q
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import ListView, TemplateView
 
+
+from django.shortcuts import render
+
+
 from apps.exercises.models import Exercise
 from apps.submissions.models import Submission
+
+
+
 
 
 class TeacherRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -91,3 +99,24 @@ def dashboard(request):
     if request.user.role == "Teacher":
         return TeacherDashboardView.as_view()(request)
     return StudentDashboardView.as_view()(request)
+
+
+def home(request):
+    return render(request, "dashboard/home.html")
+
+
+@login_required
+def dashboard(request):
+    if request.user.role == "Teacher":
+        data = {
+            "exercise_count": Exercise.objects.filter(teacher=request.user).count(),
+            "submission_count": Submission.objects.filter(exercise__teacher=request.user).count(),
+        }
+        return render(request, "dashboard/teacher_dashboard.html", data)
+    data = {
+        "exercise_count": Exercise.objects.count(),
+        "submission_count": Submission.objects.filter(student=request.user).count(),
+    }
+    return render(request, "dashboard/student_dashboard.html", data)
+
+
