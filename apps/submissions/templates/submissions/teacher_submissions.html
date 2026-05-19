@@ -1,1 +1,25 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Student Submissions</h2>
+<table class="table table-striped">
+  <tr><th>Exercise</th><th>Student</th><th>Files</th><th>Marks</th><th>Feedback</th><th>Status</th><th></th></tr>
+  {% for s in object_list %}
+  <tr>
+    <td>{{ s.exercise.title }}</td>
+    <td>{{ s.student.email }}</td>
+    <td>
+      {% if s.submission_file %}<a class="btn btn-sm btn-outline-primary" href="{{ s.submission_file.url }}">Main</a>{% endif %}
+      {% for a in s.attachments.all %}<a class="btn btn-sm btn-outline-secondary" href="{{ a.file.url }}">File {{ forloop.counter }}</a>{% endfor %}
+    </td>
+    <td>{{ s.marks|default:'-' }}</td>
+    <td>{{ s.feedback|default:'-'|truncatechars:30 }}</td>
+    <td><span class="badge {% if s.review_status == 'Reviewed' %}text-bg-success{% else %}text-bg-warning{% endif %}">{{ s.review_status }}</span></td>
+    <td><a href="{% url 'submissions:grade' s.pk %}">Grade</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+
 {% extends 'base.html' %}{% block content %}<h2>Student Submissions</h2><table class="table"><tr><th>Exercise</th><th>Student</th><th>File</th><th>Marks</th><th></th></tr>{% for s in object_list %}<tr><td>{{ s.exercise.title }}</td><td>{{ s.student.email }}</td><td><a href="{{ s.submission_file.url }}">Download</a></td><td>{{ s.marks|default:'-' }}</td><td><a href="{% url 'submissions:grade' s.pk %}">Grade</a></td></tr>{% endfor %}</table>{% endblock %}
+

@@ -1,1 +1,21 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Submission History</h2>
+<table class="table">
+<tr><th>Exercise</th><th>Date</th><th>Files</th><th>Marks</th><th>Feedback</th><th>Status</th></tr>
+{% for s in object_list %}
+<tr>
+  <td>{{ s.exercise.title }}</td>
+  <td>{{ s.submitted_at|date:'Y-m-d H:i' }}</td>
+  <td>{% if s.submission_file %}<a href="{{ s.submission_file.url }}">Main</a>{% endif %} {% for a in s.attachments.all %}<a href="{{ a.file.url }}">Extra {{ forloop.counter }}</a> {% endfor %}</td>
+  <td>{{ s.marks|default:'-' }}</td>
+  <td>{{ s.feedback|default:'-' }}</td>
+  <td><span class="badge {% if s.review_status == 'Reviewed' %}text-bg-success{% else %}text-bg-secondary{% endif %}">{{ s.review_status }}</span></td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
+
 {% extends 'base.html' %}{% block content %}<h2>Submission History</h2><table class="table"><tr><th>Exercise</th><th>Date</th><th>Marks</th><th>Feedback</th></tr>{% for s in object_list %}<tr><td>{{ s.exercise.title }}</td><td>{{ s.submitted_at }}</td><td>{{ s.marks|default:'-' }}</td><td>{{ s.feedback|default:'-' }}</td></tr>{% endfor %}</table>{% endblock %}
+

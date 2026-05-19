@@ -6,11 +6,14 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import ListView, TemplateView
 
+
 from django.shortcuts import render
 
 
 from apps.exercises.models import Exercise
 from apps.submissions.models import Submission
+
+
 
 
 
@@ -97,6 +100,7 @@ def dashboard(request):
         return TeacherDashboardView.as_view()(request)
     return StudentDashboardView.as_view()(request)
 
+
 def home(request):
     return render(request, "dashboard/home.html")
 
@@ -114,4 +118,5 @@ def dashboard(request):
         "submission_count": Submission.objects.filter(student=request.user).count(),
     }
     return render(request, "dashboard/student_dashboard.html", data)
+
 

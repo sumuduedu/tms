@@ -10,11 +10,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
+
 from django.views.generic import ListView, UpdateView
 
 from apps.exercises.models import Exercise
 
 from .forms import GradeSubmissionForm, SubmissionForm
+
+from .models import Submission, SubmissionAttachment
+
 from .models import Submission
 
 
@@ -34,9 +38,13 @@ class SubmissionHistoryView(LoginRequiredMixin, StudentRequiredMixin, ListView):
 
     def get_queryset(self):
 
+        return Submission.objects.filter(student=self.request.user).select_related("exercise", "graded_by").prefetch_related("attachments")
+
+
         return Submission.objects.filter(student=self.request.user).select_related("exercise")
 
         return Submission.objects.filter(student=self.request.user)
+
 
 
 
@@ -45,7 +53,11 @@ class TeacherSubmissionListView(LoginRequiredMixin, TeacherRequiredMixin, ListVi
     template_name = "submissions/teacher_submissions.html"
 
     def get_queryset(self):
+
+        return Submission.objects.filter(exercise__teacher=self.request.user).select_related("exercise", "student", "graded_by").prefetch_related("attachments")
+
         return Submission.objects.filter(exercise__teacher=self.request.user).select_related("exercise", "student")
+
 
 
 class GradeSubmissionView(LoginRequiredMixin, TeacherRequiredMixin, UpdateView):
@@ -57,9 +69,21 @@ class GradeSubmissionView(LoginRequiredMixin, TeacherRequiredMixin, UpdateView):
     def get_queryset(self):
         return Submission.objects.filter(exercise__teacher=self.request.user)
 
+    def form_valid(self, form):
+        submission = form.save(commit=False)
+        submission.graded_by = self.request.user
+        submission.graded_at = timezone.now()
+        submission.save()
+        messages.success(self.request, "Marks and feedback saved.")
+        return redirect(self.success_url)
 
 
 @login_required
+
+
+
+@login_required
+
 
 
 def submit_exercise(request, pk):
@@ -79,6 +103,17 @@ def submit_exercise(request, pk):
         instance.exercise = exercise
         instance.student = request.user
         instance.save()
+
+
+        if submission:
+            submission.attachments.all().delete()
+        for extra_file in request.FILES.getlist("extra_files"):
+            SubmissionAttachment.objects.create(submission=instance, file=extra_file)
+
+        messages.success(request, "Submission uploaded successfully.")
+        return redirect("submissions:history")
+    return render(request, "submissions/submit_exercise.html", {"form": form, "exercise": exercise, "submission": submission})
+
         messages.success(request, "Submission uploaded successfully.")
         return redirect("submissions:history")
     return render(request, "submissions/submit_exercise.html", {"form": form, "exercise": exercise, "submission": submission})
@@ -92,4 +127,3 @@ def submit_exercise(request, pk):
         messages.success(request, "Submission uploaded successfully.")
         return redirect("submissions:history")
     return render(request, "submissions/submit_exercise.html", {"form": form, "exercise": exercise})
-
